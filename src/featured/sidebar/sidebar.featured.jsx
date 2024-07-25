@@ -1,11 +1,28 @@
 import React from "react";
 import SidebarItem from "../../components/SidebarItem.component";
-import { PiBagSimpleFill } from "react-icons/pi";
+import { FaBriefcase, FaCalendarAlt, FaHome } from "react-icons/fa";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const jobItems = [
-    { path: "/job-list", label: "Job List" },
-    { path: "/job-grid", label: "Job Grid" },
+  const menuItems = [
+    {
+      path: "/dashboard",
+      label: "Dashboard",
+      icon: <FaHome size={20} color="#8CB0C7" />,
+    },
+    {
+      path: "/calendar",
+      label: "Calendar",
+      icon: <FaCalendarAlt size={20} color="#8CB0C7" />,
+    },
+    {
+      path: "#",
+      label: "Jobs",
+      icon: <FaBriefcase size={20} color="#8CB0C7" />,
+      children: [
+        { path: "/job-list", label: "Job List" },
+        { path: "/job-grid", label: "Job Grid" },
+      ],
+    },
   ];
 
   return (
@@ -21,16 +38,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           alt=""
         />
       </div>
-      <SidebarItem
-        title={
-          <div className="flex justify-center items-center gap-2">
-            <PiBagSimpleFill />
-            Jobs
-          </div>
-        }
-        items={jobItems}
-        isOpen={isOpen}
-      />
+      {menuItems.map((item, index) => (
+        <SidebarItem
+          key={index}
+          title={
+            <>
+              {item.icon}
+              {isOpen && <span>{item.label}</span>}
+            </>
+          }
+          items={item.children}
+          isOpen={isOpen}
+        />
+      ))}
     </div>
   );
 };

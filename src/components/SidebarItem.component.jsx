@@ -15,18 +15,22 @@ const SidebarItem = ({ title, items, isOpen }) => {
         className="flex justify-between items-center cursor-pointer p-2 hover:bg-gray-700"
         onClick={toggleItemOpen}
       >
-        <span className={`${isOpen ? "block" : "hidden"}`}>{title}</span>
-        {isOpen ? isItemOpen ? <FaChevronDown /> : <FaChevronRight /> : null}
+        <div className="flex items-center gap-2">{title}</div>
+        {isOpen && items ? (
+          isItemOpen ? (
+            <FaChevronDown />
+          ) : (
+            <FaChevronRight />
+          )
+        ) : null}
       </div>
-      {isItemOpen && isOpen && (
+      {isItemOpen && isOpen && items && (
         <ul className="pl-4">
           {items.map((item, index) => (
-            <Link
-              to={item.path}
-              key={index}
-              className="p-2 flex flex-col hover:bg-gray-600 cursor-pointer"
-            >
-              {item.label}
+            <Link key={index} to={item.path}>
+              <li className="p-2 hover:bg-gray-600 cursor-pointer">
+                {item.label}
+              </li>
             </Link>
           ))}
         </ul>
