@@ -14,11 +14,11 @@ const Header = () => {
         <SearchBar />
         <div className="flex gap-5 items-center">
           <FlagMenu />
-          <MdOutlineDashboardCustomize className="text-white text-[24px] " />
-          <BiFullscreen className="text-[24px] text-white" />
-          <NotificationBell />
-          <AvatarMenu />
-          <FaCog className="text-white text-[20px] animate-spin " />
+          <MdOutlineDashboardCustomize className="text-white text-[24px]  cursor-pointer" />
+          <BiFullscreen className="text-[24px] text-white cursor-pointer" />
+          <NotificationBell className="cursor-pointer" />
+          <AvatarMenu className="cursor-pointer" />
+          <FaCog className="text-white text-[20px] animate-spin cursor-pointer " />
         </div>
       </nav>
     </div>
