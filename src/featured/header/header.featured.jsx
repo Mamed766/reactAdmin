@@ -7,11 +7,11 @@ import NotificationBell from "../../components/NotificationBell.component";
 import AvatarMenu from "../../components/AvatarMenu.component";
 import FlagMenu from "../../components/FlagMenu.component";
 
-const Header = () => {
+const Header = ({ toggleSidebar }) => {
   return (
     <div className="relative">
       <nav className="bg-[#2A3042] p-4 flex items-center justify-between">
-        <SearchBar />
+        <SearchBar toggleSidebar={toggleSidebar} />
         <div className="flex gap-5 items-center">
           <FlagMenu />
           <MdOutlineDashboardCustomize className="text-white text-[24px]  cursor-pointer" />

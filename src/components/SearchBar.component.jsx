@@ -1,10 +1,11 @@
 import React from "react";
 import { FaBars, FaSearch } from "react-icons/fa";
 import MegaMenu from "./MegaMenu.component";
-const SearchBar = () => {
+
+const SearchBar = ({ toggleSidebar }) => {
   return (
     <div className="flex gap-5 items-center">
-      <FaBars className="text-white" />
+      <FaBars className="text-white cursor-pointer" onClick={toggleSidebar} />
       <div className="flex gap-2 items-center">
         <FaSearch className="text-gray-500" />
         <input

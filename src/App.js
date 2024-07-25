@@ -1,11 +1,20 @@
 import React from "react";
 import Header from "./featured/header/header.featured";
+import Layout from "./featured/layout/Layout.featured";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Joblist from "./pages/Joblist.page";
+import Jobgrid from "./pages/Jobgrid.page";
 
 const App = () => {
   return (
-    <div>
-      <Header />
-    </div>
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/job-list" element={<Joblist />} />
+          <Route path="/job-grid" element={<Jobgrid />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   );
 };
 
