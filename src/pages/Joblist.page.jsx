@@ -8,6 +8,7 @@ import { FaTrash } from "react-icons/fa";
 import useSWR, { mutate } from "swr";
 import AddJobModal from "./jobs/AddJobModal";
 import { deleteData } from "../services/api";
+import ViewModal from "../components/ViewModal.component";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -15,7 +16,7 @@ const Joblist = () => {
   const { data, error } = useSWR("http://localhost:3001/data", fetcher);
   const [showModal, setShowModal] = useState(false);
   const [editJob, setEditJob] = useState(null);
-
+  const [viewJob, setViewJob] = useState(null);
   if (error) {
     return <h1>Error</h1>;
   }
@@ -43,6 +44,10 @@ const Joblist = () => {
     setShowModal(true);
   };
 
+  const handleView = (job) => {
+    setViewJob(job);
+  };
+
   const headers = [
     "No",
     "Img",
@@ -62,6 +67,11 @@ const Joblist = () => {
         setShowModal={setShowModal}
         editJob={editJob}
         onSave={handleSave}
+      />
+      <ViewModal
+        showModal={!!viewJob}
+        setShowModal={() => setViewJob(null)}
+        job={viewJob}
       />
       <div className="flex justify-between pb-4 border-b border-gray-600">
         <div className="flex items-center text-white">
@@ -229,7 +239,10 @@ const Joblist = () => {
                       <td className="px-6 py-4">
                         <ul className="flex gap-2">
                           <li className="bg-blue-700 rounded-md">
-                            <button className="p-3">
+                            <button
+                              onClick={() => handleView(user)}
+                              className="p-3"
+                            >
                               <FaEye className="text-blue-300" />
                             </button>
                           </li>
