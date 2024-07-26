@@ -1,12 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoMdRefresh } from "react-icons/io";
 import { TbDotsVertical } from "react-icons/tb";
 import { PiCaretUpDownFill } from "react-icons/pi";
 import { FaEye } from "react-icons/fa";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
+import useSWR, { mutate } from "swr";
+import AddJobModal from "./jobs/AddJobModal";
+import { deleteData } from "../services/api";
+
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const Joblist = () => {
+  const { data, error } = useSWR("http://localhost:3001/data", fetcher);
+  const [showModal, setShowModal] = useState(false);
+  const [editJob, setEditJob] = useState(null);
+
+  if (error) {
+    return <h1>Error</h1>;
+  }
+
+  if (!data) {
+    return <h1>Loading...</h1>;
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteData(id);
+      mutate("http://localhost:3001/data");
+    } catch (error) {
+      console.error("Failed to delete data:", error);
+    }
+  };
+
+  const handleSave = () => {
+    mutate("http://localhost:3001/data");
+    setEditJob(null);
+  };
+
+  const handleEdit = (job) => {
+    setEditJob(job);
+    setShowModal(true);
+  };
+
   const headers = [
     "No",
     "Img",
@@ -21,16 +57,28 @@ const Joblist = () => {
 
   return (
     <div className="bg-[#2A3042] p-4 rounded-[4px]">
+      <AddJobModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        editJob={editJob}
+        onSave={handleSave}
+      />
       <div className="flex justify-between pb-4 border-b border-gray-600">
-        <div className="flex items-center  text-white ">
+        <div className="flex items-center text-white">
           <h3>Jobs Lists</h3>
         </div>
         <div className="flex gap-2 justify-center items-center">
-          <button className="bg-blue-500 p-2 text-white rounded-md ">
+          <button
+            onClick={() => {
+              setEditJob(null);
+              setShowModal(true);
+            }}
+            className="bg-blue-500 p-2 text-white rounded-md"
+          >
             <p className="text-[12px]">Add New Job</p>
           </button>
           <div className="bg-[#32394E] p-2.5 rounded-md text-white cursor-pointer">
-            <IoMdRefresh className=" " />
+            <IoMdRefresh />
           </div>
           <div className="bg-[#34C38F] p-2 rounded-md cursor-pointer">
             <TbDotsVertical className="text-white" />
@@ -38,7 +86,7 @@ const Joblist = () => {
         </div>
       </div>
       <div className="py-4">
-        <form className="flex gap-2 " action="">
+        <form className="flex gap-2" action="">
           <select
             className="w-[20%] text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
             name=""
@@ -102,7 +150,7 @@ const Joblist = () => {
             </option>
           </select>
           <input
-            className="bg-transparent w-[30%] border rounded-md p-1 outline-none border-gray-600 text-white "
+            className="bg-transparent w-[30%] border rounded-md p-1 outline-none border-gray-600 text-white"
             type="date"
             id="date"
           />
@@ -127,42 +175,53 @@ const Joblist = () => {
                 ))}
               </tr>
             </thead>
-            <tbody className="bg-transparent text-gray-500  ">
-              <tr className="text-[11px]">
-                <td className="px-6 py-4">1</td>
-                <td className="px-6 py-4">
-                  <img
-                    className="w-10 h-10 object-cover rounded-full"
-                    src="https://www.investopedia.com/thmb/XJDLdvCuNbcWk_EVZzXx84ae82c=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1258889149-1f50bb87f9d54dca87813923f12ac94b.jpg"
-                    alt=""
-                  />
-                </td>
-                <td className="px-6 py-4">Magento Developer</td>
-                <td className="px-6 py-4">Web Technology pvt.ltd</td>
-                <td className="px-6 py-4">Location</td>
-                <td className="px-6 py-4">Position</td>
-                <td className="px-6 py-4">Type</td>
-                <td className="px-6 py-4">Status</td>
-                <td className="px-6 py-4">
-                  <ul className="flex gap-2">
-                    <li className="bg-blue-700 rounded-md">
-                      <button className="p-3">
-                        <FaEye className="text-blue-300" />
-                      </button>
-                    </li>
-                    <li className="bg-blue-500 rounded-md">
-                      <button className="p-3 ">
-                        <FaPencilAlt className="text-blue-200" />
-                      </button>
-                    </li>
-                    <li className="bg-red-700 rounded-md">
-                      <button className="p-3">
-                        <FaTrash className="text-red-300" />
-                      </button>
-                    </li>
-                  </ul>
-                </td>
-              </tr>
+            <tbody className="bg-transparent text-gray-500">
+              {data &&
+                data.map((user, index) => {
+                  return (
+                    <tr key={user.id} className="text-[13px]">
+                      <td className="px-6 py-4">{index + 1}</td>
+                      <td className="px-6 py-4">
+                        <img
+                          className="w-10 h-10 object-cover rounded-full"
+                          src={user.file}
+                          alt=""
+                        />
+                      </td>
+                      <td className="px-6 py-4">{user.jobTitle}</td>
+                      <td className="px-6 py-4">{user.companyName}</td>
+                      <td className="px-6 py-4">{user.location}</td>
+                      <td className="px-6 py-4">{user.position}</td>
+                      <td className="px-6 py-4">{user.type}</td>
+                      <td className="px-6 py-4">{user.status}</td>
+                      <td className="px-6 py-4">
+                        <ul className="flex gap-2">
+                          <li className="bg-blue-700 rounded-md">
+                            <button className="p-3">
+                              <FaEye className="text-blue-300" />
+                            </button>
+                          </li>
+                          <li
+                            onClick={() => handleEdit(user)}
+                            className="bg-blue-500 rounded-md"
+                          >
+                            <button className="p-3">
+                              <FaPencilAlt className="text-blue-200" />
+                            </button>
+                          </li>
+                          <li
+                            onClick={() => handleDelete(user.id)}
+                            className="bg-red-700 rounded-md"
+                          >
+                            <button className="p-3">
+                              <FaTrash className="text-red-300" />
+                            </button>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
