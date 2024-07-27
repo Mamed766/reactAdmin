@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import { postData, updateData } from "../../services/api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
 const AddJobModal = ({ showModal, setShowModal, editJob, onSave }) => {
-  const { data, error } = useSWR("http://localhost:3001/data", fetcher);
-
   const formik = useFormik({
     initialValues: {
       jobId: "",

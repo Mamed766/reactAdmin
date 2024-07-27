@@ -26,4 +26,16 @@ const flags = [
   },
 ];
 
+export const headers = [
+  "No",
+  "Img",
+  "Job Title",
+  "Company Name",
+  "Location",
+  "Type",
+  "Position",
+  "Status",
+  "Action",
+];
+
 export default flags;

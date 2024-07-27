@@ -1,10 +1,9 @@
 import React from "react";
-import { FaSearch, FaSpinner } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaSpinner } from "react-icons/fa";
 import useSWR from "swr";
 import { fetcher } from "./Joblist.page";
-import JobsGridForm from "../components/JobsGridForm";
-import UserList from "../components/UserList";
+import JobsGridForm from "../components/JobsGridForm.component";
+import UserList from "../components/UserList.component";
 
 const Jobgrid = () => {
   const { data, error } = useSWR("http://localhost:3001/data", fetcher);
