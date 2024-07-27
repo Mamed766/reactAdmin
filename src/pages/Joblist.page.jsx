@@ -9,6 +9,7 @@ import useSWR, { mutate } from "swr";
 import AddJobModal from "./jobs/AddJobModal";
 import { deleteData } from "../services/api";
 import ViewModal from "../components/ViewModal.component";
+import { FaSpinner } from "react-icons/fa";
 
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -22,9 +23,15 @@ const Joblist = () => {
   }
 
   if (!data) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="h-screen w-full flex justify-center items-center animate-spin-custom relative">
+        <FaSpinner
+          size={50}
+          className="absolute text-blue-400  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        />
+      </div>
+    );
   }
-
   const handleDelete = async (id) => {
     try {
       await deleteData(id);

@@ -1,11 +1,21 @@
 import React from "react";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaSpinner } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import useSWR from "swr";
 import { fetcher } from "./Joblist.page";
 
 const Jobgrid = () => {
   const { data, error } = useSWR("http://localhost:3001/data", fetcher);
+  if (!data) {
+    return (
+      <div className="h-screen w-full flex justify-center items-center animate-spin-custom relative">
+        <FaSpinner
+          size={50}
+          className="absolute text-blue-400  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        />
+      </div>
+    );
+  }
   return (
     <div>
       <div className="">

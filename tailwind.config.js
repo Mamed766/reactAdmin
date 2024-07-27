@@ -7,6 +7,7 @@ module.exports = {
         spin: "spin 3s linear infinite",
         bell: "bell 1s infinite",
         "fade-in": "fade-in 0.5s ease-in-out",
+        "spin-custom": "spin 1s linear infinite",
       },
       keyframes: {
         bell: {
