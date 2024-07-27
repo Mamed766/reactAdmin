@@ -30,6 +30,7 @@ const AddJobModal = ({ showModal, setShowModal, editJob, onSave }) => {
       position: Yup.string().required("Position is required"),
       type: Yup.string().required("Type is required"),
       status: Yup.string().required("Status is required"),
+      file: Yup.string().required("File is required"),
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
@@ -205,6 +206,9 @@ const AddJobModal = ({ showModal, setShowModal, editJob, onSave }) => {
               }}
               className="w-full p-2 rounded bg-[#32394E] text-white"
             />
+            {formik.touched.file && formik.errors.file ? (
+              <div className="text-red-500 text-sm">{formik.errors.file}</div>
+            ) : null}
           </div>
           <div className="flex justify-end">
             <button
