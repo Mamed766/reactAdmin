@@ -5,6 +5,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Joblist from "./pages/Joblist.page";
 import Jobgrid from "./pages/Jobgrid.page";
 
+import "react-toastify/dist/ReactToastify.css";
+
 const App = () => {
   return (
     <BrowserRouter>

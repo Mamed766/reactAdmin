@@ -3,6 +3,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import useSWR, { mutate } from "swr";
 import { postData, updateData } from "../../services/api";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -36,10 +38,12 @@ const AddJobModal = ({ showModal, setShowModal, editJob, onSave }) => {
           if (response.status === 200) {
             mutate("http://localhost:3001/data");
           }
+          toast.info("Job updated successfully!");
         } else {
           const response = await postData(values);
           if (response.status === 201) {
             mutate("http://localhost:3001/data");
+            toast.success("Job added successfully!");
           }
         }
         resetForm();

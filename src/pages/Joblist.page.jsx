@@ -10,6 +10,8 @@ import AddJobModal from "./jobs/AddJobModal";
 import { deleteData } from "../services/api";
 import ViewModal from "../components/ViewModal.component";
 import { FaSpinner } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -36,6 +38,7 @@ const Joblist = () => {
     try {
       await deleteData(id);
       mutate("http://localhost:3001/data");
+      toast.error("Item deleted successfully!");
     } catch (error) {
       console.error("Failed to delete data:", error);
     }
@@ -278,6 +281,7 @@ const Joblist = () => {
           </table>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
