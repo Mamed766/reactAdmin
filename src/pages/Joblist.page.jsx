@@ -21,7 +21,9 @@ const Joblist = () => {
   const [editJob, setEditJob] = useState(null);
   const [viewJob, setViewJob] = useState(null);
   if (error) {
-    return <h1>Error</h1>;
+    return (
+      <h1 className="flex justify-center text-red-600 text-[10rem]">Error </h1>
+    );
   }
 
   if (!data) {

@@ -6,6 +6,13 @@ import { fetcher } from "./Joblist.page";
 
 const Jobgrid = () => {
   const { data, error } = useSWR("http://localhost:3001/data", fetcher);
+
+  if (error) {
+    return (
+      <h1 className="flex justify-center text-red-600 text-[10rem]">Error </h1>
+    );
+  }
+
   if (!data) {
     return (
       <div className="h-screen w-full flex justify-center items-center animate-spin-custom relative">
