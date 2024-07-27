@@ -10,7 +10,7 @@ import AddJobModal from "./jobs/AddJobModal";
 import { deleteData } from "../services/api";
 import ViewModal from "../components/ViewModal.component";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 const Joblist = () => {
   const { data, error } = useSWR("http://localhost:3001/data", fetcher);

@@ -10,6 +10,7 @@ const App = () => {
     <BrowserRouter>
       <Layout>
         <Routes>
+          <Route path="/" element={<Joblist />} />
           <Route path="/job-list" element={<Joblist />} />
           <Route path="/job-grid" element={<Jobgrid />} />
         </Routes>
