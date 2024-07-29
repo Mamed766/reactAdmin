@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <div
-      className={`bg-[#2A3042] text-white h-screen p-4 ${
+      className={`bg-[#2A3042] text-white h-[100rem] p-4 flex flex-col z-10 ${
         isOpen ? "w-64" : "w-20"
       } transition-width duration-300`}
     >

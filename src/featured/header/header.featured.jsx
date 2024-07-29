@@ -9,7 +9,7 @@ import FlagMenu from "../../components/FlagMenu.component";
 
 const Header = ({ toggleSidebar }) => {
   return (
-    <div className="relative">
+    <div className=" w-full z-20">
       <nav className="bg-[#2A3042] p-4 flex items-center justify-between">
         <SearchBar toggleSidebar={toggleSidebar} />
         <div className="flex gap-5 items-center">
