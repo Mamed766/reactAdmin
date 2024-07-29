@@ -89,6 +89,9 @@ const JobListForm = ({
         <option className="bg-gray-700" value="Part Time">
           Part Time
         </option>
+        <option className="bg-gray-700" value="Internship">
+          Internship
+        </option>
       </select>
       <input
         className="bg-transparent w-[30%] border rounded-md p-1 outline-none border-gray-600 text-white"
