@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { IoMdRefresh } from "react-icons/io";
 import { TbDotsVertical } from "react-icons/tb";
 import { PiCaretUpDownFill } from "react-icons/pi";
@@ -20,6 +20,26 @@ const Joblist = () => {
   const [showModal, setShowModal] = useState(false);
   const [editJob, setEditJob] = useState(null);
   const [viewJob, setViewJob] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showCount, setShowCount] = useState(5);
+  const [status, setStatus] = useState("All");
+  const [type, setType] = useState("All");
+
+  const filteredData = useMemo(() => {
+    if (!data) return [];
+    return data
+      .filter((job) => {
+        const matchesSearch = job.companyName
+          .toLowerCase()
+          .includes(search.toLowerCase());
+        const matchesStatus = status === "All" || job.status === status;
+        const matchesType = type === "All" || job.type === type;
+
+        return matchesSearch && matchesStatus && matchesType;
+      })
+      .slice(0, showCount);
+  }, [data, search, showCount, status, type]);
+
   if (error) {
     return (
       <h1 className="flex justify-center text-red-600 text-[10rem]">Error </h1>
@@ -96,7 +116,12 @@ const Joblist = () => {
         </div>
       </div>
       <div className="py-4">
-        <JobListForm />
+        <JobListForm
+          setSearch={setSearch}
+          setShowCount={setShowCount}
+          setStatus={setStatus}
+          setType={setType}
+        />
       </div>
       <div className="overflow-x-auto">
         <div className="overflow-x-auto">
@@ -119,17 +144,16 @@ const Joblist = () => {
             </thead>
             <tbody className="bg-transparent text-gray-500">
               {data &&
-                data.map((user, index) => {
-                  return (
-                    <JoblistCard
-                      user={user}
-                      index={index}
-                      handleView={handleView}
-                      handleDelete={handleDelete}
-                      handleEdit={handleEdit}
-                    />
-                  );
-                })}
+                filteredData.map((user, index) => (
+                  <JoblistCard
+                    key={index}
+                    user={user}
+                    index={index}
+                    handleView={handleView}
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                  />
+                ))}
             </tbody>
           </table>
         </div>

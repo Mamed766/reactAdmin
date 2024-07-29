@@ -1,67 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
 
-const JobListForm = () => {
+const JobListForm = ({ setSearch, setShowCount, setStatus, setType }) => {
   return (
     <form className="flex gap-2" action="">
       <select
         className="w-[20%] text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
         name=""
         id=""
+        onChange={(e) => setShowCount(Number(e.target.value))}
       >
-        <option className="bg-gray-700" value="Show 10">
+        <option className="bg-gray-700" value="5">
+          Show 5
+        </option>
+        <option className="bg-gray-700" value="10">
           Show 10
         </option>
-        <option className="bg-gray-700" value="Show 20">
+        <option className="bg-gray-700" value="20">
           Show 20
         </option>
-        <option className="bg-gray-700" value="Show 30">
+        <option className="bg-gray-700" value="30">
           Show 30
         </option>
-        <option className="bg-gray-700" value="Show 40">
+        <option className="bg-gray-700" value="40">
           Show 40
         </option>
-        <option className="bg-gray-700" value="Show 50">
+        <option className="bg-gray-700" value="50">
           Show 50
         </option>
       </select>
       <input
         type="text"
         className="w-full text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
-        placeholder="Search for ..."
+        placeholder="Search for CompanyName"
+        onChange={(e) => setSearch(e.target.value)}
       />
       <select
         className="w-[20%] text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
         name=""
         id=""
+        onChange={(e) => setStatus(e.target.value)}
       >
-        <option className="bg-gray-700" value="Show 10">
+        <option className="bg-gray-700" value="All">
           Status
         </option>
-        <option className="bg-gray-700" value="Show 20">
+        <option className="bg-gray-700" value="All">
           All
         </option>
-        <option className="bg-gray-700" value="Show 30">
+        <option className="bg-gray-700" value="Active">
           Active
         </option>
-        <option className="bg-gray-700" value="Show 40">
+        <option className="bg-gray-700" value="New">
           New
+        </option>
+        <option className="bg-gray-700" value="Close">
+          Close
         </option>
       </select>
       <select
         className="w-[20%] text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
         name=""
         id=""
+        onChange={(e) => {
+          setType(e.target.value);
+        }}
       >
-        <option className="bg-gray-700" value="Show 10">
+        <option className="bg-gray-700" value="All">
           Select Type
         </option>
-        <option className="bg-gray-700" value="Show 20">
+        <option className="bg-gray-700" value="All">
           All
         </option>
-        <option className="bg-gray-700" value="Show 30">
+        <option className="bg-gray-700" value="Full Time">
           Full Time
         </option>
-        <option className="bg-gray-700" value="Show 40">
+        <option className="bg-gray-700" value="Part Time">
           Part Time
         </option>
       </select>
