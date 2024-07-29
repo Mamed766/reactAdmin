@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 
-const JobListForm = ({ setSearch, setShowCount, setStatus, setType }) => {
+const JobListForm = ({
+  search,
+  showCount,
+  status,
+  type,
+  setSearch,
+  setShowCount,
+  setStatus,
+  setType,
+}) => {
   return (
     <form className="flex gap-2" action="">
       <select
         className="w-[20%] text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
         name=""
         id=""
+        value={showCount}
         onChange={(e) => setShowCount(Number(e.target.value))}
       >
         <option className="bg-gray-700" value="5">
@@ -32,12 +42,14 @@ const JobListForm = ({ setSearch, setShowCount, setStatus, setType }) => {
         type="text"
         className="w-full text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
         placeholder="Search for CompanyName"
+        value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
       <select
         className="w-[20%] text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
         name=""
         id=""
+        value={status}
         onChange={(e) => setStatus(e.target.value)}
       >
         <option className="bg-gray-700" value="All">
@@ -60,6 +72,7 @@ const JobListForm = ({ setSearch, setShowCount, setStatus, setType }) => {
         className="w-[20%] text-white p-[3px] border-gray-600 rounded-md outline-none border bg-transparent"
         name=""
         id=""
+        value={type}
         onChange={(e) => {
           setType(e.target.value);
         }}

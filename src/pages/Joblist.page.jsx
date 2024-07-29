@@ -25,6 +25,14 @@ const Joblist = () => {
   const [status, setStatus] = useState("All");
   const [type, setType] = useState("All");
 
+  const resetFilters = () => {
+    setSearch("");
+    setShowCount(5);
+    setStatus("All");
+    setType("All");
+    mutate("http://localhost:3001/data");
+  };
+
   const filteredData = useMemo(() => {
     if (!data) return [];
     return data
@@ -107,7 +115,10 @@ const Joblist = () => {
           >
             <p className="text-[12px]">Add New Job</p>
           </button>
-          <div className="bg-[#32394E] p-2.5 rounded-md text-white cursor-pointer">
+          <div
+            className="bg-[#32394E] p-2.5 rounded-md text-white cursor-pointer"
+            onClick={resetFilters}
+          >
             <IoMdRefresh />
           </div>
           <div className="bg-[#34C38F] p-2 rounded-md cursor-pointer">
@@ -117,6 +128,10 @@ const Joblist = () => {
       </div>
       <div className="py-4">
         <JobListForm
+          search={search}
+          showCount={showCount}
+          status={status}
+          type={type}
           setSearch={setSearch}
           setShowCount={setShowCount}
           setStatus={setStatus}
