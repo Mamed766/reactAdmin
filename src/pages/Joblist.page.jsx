@@ -6,7 +6,7 @@ import useSWR, { mutate } from "swr";
 import AddJobModal from "./jobs/AddJobModal";
 import { deleteData } from "../services/api";
 import ViewModal from "../components/ViewModal.component";
-import { FaSpinner } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaSpinner } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { headers } from "../static/mockdb";
@@ -24,29 +24,66 @@ const Joblist = () => {
   const [showCount, setShowCount] = useState(5);
   const [status, setStatus] = useState("All");
   const [type, setType] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const resetFilters = () => {
     setSearch("");
     setShowCount(5);
     setStatus("All");
     setType("All");
+    setCurrentPage(1);
     mutate("http://localhost:3001/data");
   };
 
-  const filteredData = useMemo(() => {
-    if (!data) return [];
-    return data
-      .filter((job) => {
-        const matchesSearch = job.companyName
-          .toLowerCase()
-          .includes(search.toLowerCase());
-        const matchesStatus = status === "All" || job.status === status;
-        const matchesType = type === "All" || job.type === type;
+  const handleSearchChange = (value) => {
+    setSearch(value);
+    setCurrentPage(1);
+  };
 
-        return matchesSearch && matchesStatus && matchesType;
-      })
-      .slice(0, showCount);
-  }, [data, search, showCount, status, type]);
+  const handleShowCountChange = (value) => {
+    setShowCount(value);
+    setCurrentPage(1);
+  };
+
+  const handleStatusChange = (value) => {
+    setStatus(value);
+    setCurrentPage(1);
+  };
+
+  const handleTypeChange = (value) => {
+    setType(value);
+    setCurrentPage(1);
+  };
+
+  const filteredAndPaginatedData = useMemo(() => {
+    if (!data) return { paginatedData: [], totalPages: 0 };
+
+    const filtered = data.filter((job) => {
+      const matchesSearch = job.companyName
+        .toLowerCase()
+        .includes(search.toLowerCase());
+      const matchesStatus = status === "All" || job.status === status;
+      const matchesType = type === "All" || job.type === type;
+
+      return matchesSearch && matchesStatus && matchesType;
+    });
+
+    const totalPages = Math.ceil(filtered.length / showCount);
+
+    const startIndex = (currentPage - 1) * showCount;
+    const endIndex = startIndex + showCount;
+    const paginatedData = filtered.slice(startIndex, endIndex);
+
+    return { paginatedData, totalPages };
+  }, [data, search, showCount, status, type, currentPage]);
+
+  const { paginatedData, totalPages } = filteredAndPaginatedData;
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
 
   if (error) {
     return (
@@ -59,11 +96,12 @@ const Joblist = () => {
       <div className="h-screen w-full flex justify-center items-center animate-spin-custom relative">
         <FaSpinner
           size={50}
-          className="absolute text-blue-400  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="absolute text-blue-400 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         />
       </div>
     );
   }
+
   const handleDelete = async (id) => {
     try {
       await deleteData(id);
@@ -132,10 +170,10 @@ const Joblist = () => {
           showCount={showCount}
           status={status}
           type={type}
-          setSearch={setSearch}
-          setShowCount={setShowCount}
-          setStatus={setStatus}
-          setType={setType}
+          setSearch={handleSearchChange}
+          setShowCount={handleShowCountChange}
+          setStatus={handleStatusChange}
+          setType={handleTypeChange}
         />
       </div>
       <div className="overflow-x-auto">
@@ -158,19 +196,47 @@ const Joblist = () => {
               </tr>
             </thead>
             <tbody className="bg-transparent text-gray-500">
-              {data &&
-                filteredData.map((user, index) => (
-                  <JoblistCard
-                    key={index}
-                    user={user}
-                    index={index}
-                    handleView={handleView}
-                    handleDelete={handleDelete}
-                    handleEdit={handleEdit}
-                  />
-                ))}
+              {paginatedData.map((user, index) => (
+                <JoblistCard
+                  key={index}
+                  user={user}
+                  index={index}
+                  handleView={handleView}
+                  handleDelete={handleDelete}
+                  handleEdit={handleEdit}
+                />
+              ))}
             </tbody>
           </table>
+          <div className="flex justify-between text-gray-400 mt-4">
+            <div>
+              <p>
+                Showing {Math.min(showCount, paginatedData.length)} of{" "}
+                {data.length} results
+              </p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <div
+                className={`cursor-pointer ${
+                  currentPage === 1 ? "text-gray-600" : "text-gray-400"
+                }`}
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                <FaAngleLeft />
+              </div>
+              <div className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white">
+                {currentPage}
+              </div>
+              <div
+                className={`cursor-pointer ${
+                  currentPage === totalPages ? "text-gray-600" : "text-gray-400"
+                }`}
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                <FaAngleRight />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <ToastContainer />
